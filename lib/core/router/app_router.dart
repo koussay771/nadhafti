@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/auth/signup_screen.dart';
+import '../../presentation/screens/booking/booking_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/location/pick_location_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_screen.dart';
@@ -69,6 +70,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: AppRoutes.addProperty,
         builder: (context, state) => const AddPropertyScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.booking,
+        builder: (context, state) => const BookingScreen(),
       ),
       // TODO Phase 3: home route
       // TODO Phase 4–7: remaining routes
