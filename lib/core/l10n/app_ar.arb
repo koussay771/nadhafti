@@ -1,0 +1,113 @@
+{
+  "@@locale": "ar",
+  "@@context": "Nadhafti app — Arabic strings",
+
+  "appName": "نظافتي",
+
+  "onboarding_skip": "تخطي",
+  "onboarding_next": "التالي",
+  "onboarding_getStarted": "ابدأ الآن",
+
+  "onboarding1_title": "استمتع ببيتك النظيف",
+  "onboarding1_subtitle": "محترفو التنظيف يضمنون لك بيتًا لامعًا دائمًا",
+
+  "onboarding2_title": "احجز بسهولة",
+  "onboarding2_subtitle": "بلمسة زر واحدة، حدد موعد تنظيفك القادم",
+
+  "onboarding3_title": "خدمة سريعة",
+  "onboarding3_subtitle": "احصل على تنظيف في أقرب وقت ممكن وبأفضل جودة",
+
+  "auth_login": "تسجيل الدخول",
+  "auth_signup": "إنشاء حساب",
+  "auth_email": "البريد الإلكتروني",
+  "auth_password": "كلمة المرور",
+  "auth_confirmPassword": "تأكيد كلمة المرور",
+  "auth_firstName": "الاسم الأول",
+  "auth_lastName": "اللقب",
+  "auth_phone": "رقم الهاتف",
+  "auth_forgotPassword": "نسيت كلمة المرور؟",
+  "auth_noAccount": "ليس لديك حساب؟ ",
+  "auth_hasAccount": "لديك حساب بالفعل؟ ",
+  "auth_signupLink": "سجّل الآن",
+  "auth_loginLink": "تسجيل الدخول",
+  "auth_termsAccept": "أوافق على الشروط وسياسة الخصوصية",
+  "auth_socialComingSoon": "قريبًا",
+  "auth_welcome": "مرحبًا بك في نظافتي 👋",
+  "auth_welcomeSubtitle": "احجز خدمة التنظيف المثالية لبيتك",
+
+  "home_greeting": "مرحبًا، {name}! 👋",
+  "@home_greeting": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "home_locationBadge": "المنستير، تونس",
+  "home_hero_headline": "خلّ بيتك يلمع اليوم!",
+  "home_cta": "احجز الآن",
+
+  "location_title": "اختر الموقع",
+  "location_search_hint": "ابحث عن عنوانك...",
+  "location_savedAddresses": "العناوين المحفوظة",
+  "location_chooseOnMap": "اختر على الخريطة",
+  "location_unavailable_title": "غير متاح في منطقتك",
+  "location_unavailable_body": "نحن نخدم حاليًا المنستير وضواحيها. سنصل إليك قريبًا!",
+
+  "property_title": "اختر العقار",
+  "property_empty_title": "لا يوجد عقار بعد",
+  "property_empty_body": "أضف عقارك الأول لبدء الحجز",
+  "property_add": "إضافة عقار",
+  "property_type_apartment": "شقة",
+  "property_type_house": "منزل",
+  "property_type_villa": "فيلا",
+  "property_type_office": "مكتب",
+  "property_rooms": "غرف النوم",
+  "property_bathrooms": "الحمامات",
+  "property_size": "المساحة (م²)",
+  "property_notes": "ملاحظات إضافية",
+  "property_save": "حفظ العقار",
+  "property_nickname": "اسم العقار (اختياري)",
+
+  "booking_title": "اختر الباقة",
+  "booking_standard": "تنظيف عادي",
+  "booking_deep": "تنظيف عميق",
+  "booking_moveInOut": "تنظيف عند الانتقال",
+  "booking_office": "تنظيف مكتب",
+  "booking_selectDate": "اختر التاريخ والوقت",
+  "booking_confirm": "تأكيد الحجز",
+  "booking_price": "{price} دت",
+  "@booking_price": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "profile_title": "الملف الشخصي",
+  "profile_save": "حفظ التغييرات",
+  "profile_editAvatar": "تغيير الصورة",
+
+  "settings_title": "الإعدادات",
+  "settings_profile": "الملف الشخصي",
+  "settings_myProperties": "عقاراتي",
+  "settings_myLocations": "مواقعي",
+  "settings_terms": "شروط الخدمة",
+  "settings_privacy": "سياسة الخصوصية",
+  "settings_contact": "تواصل معنا",
+  "settings_switchToCleaner": "التحويل إلى حساب عامل تنظيف",
+  "settings_logout": "تسجيل الخروج",
+  "settings_deleteAccount": "حذف الحساب",
+  "settings_deleteAccount_confirm": "هل أنت متأكد من حذف حسابك؟ هذا الإجراء لا يمكن التراجع عنه.",
+  "settings_language": "اللغة",
+  "settings_language_ar": "العربية",
+  "settings_language_fr": "Français",
+
+  "common_next": "التالي",
+  "common_back": "رجوع",
+  "common_cancel": "إلغاء",
+  "common_save": "حفظ",
+  "common_delete": "حذف",
+  "common_confirm": "تأكيد",
+  "common_loading": "جارٍ التحميل...",
+  "common_retry": "إعادة المحاولة",
+  "common_error_generic": "حدث خطأ غير متوقع. الرجاء المحاولة مجددًا.",
+  "common_currency": "دت"
+}

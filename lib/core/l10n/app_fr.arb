@@ -1,0 +1,113 @@
+{
+  "@@locale": "fr",
+  "@@context": "Nadhafti app — French strings",
+
+  "appName": "Nadhafti",
+
+  "onboarding_skip": "Passer",
+  "onboarding_next": "Suivant",
+  "onboarding_getStarted": "Commencer",
+
+  "onboarding1_title": "Profitez de votre maison propre",
+  "onboarding1_subtitle": "Nos pros du ménage garantissent une maison impeccable",
+
+  "onboarding2_title": "Réservez facilement",
+  "onboarding2_subtitle": "En un clic, planifiez votre prochain nettoyage",
+
+  "onboarding3_title": "Service rapide",
+  "onboarding3_subtitle": "Faites nettoyer votre maison où vous voulez, le plus vite possible",
+
+  "auth_login": "Se connecter",
+  "auth_signup": "Créer un compte",
+  "auth_email": "Email",
+  "auth_password": "Mot de passe",
+  "auth_confirmPassword": "Confirmer le mot de passe",
+  "auth_firstName": "Prénom",
+  "auth_lastName": "Nom",
+  "auth_phone": "Téléphone",
+  "auth_forgotPassword": "Mot de passe oublié ?",
+  "auth_noAccount": "Pas de compte ? ",
+  "auth_hasAccount": "Déjà un compte ? ",
+  "auth_signupLink": "S'inscrire",
+  "auth_loginLink": "Se connecter",
+  "auth_termsAccept": "J'accepte les conditions et la politique de confidentialité",
+  "auth_socialComingSoon": "Bientôt disponible",
+  "auth_welcome": "Bienvenue sur Nadhafti 👋",
+  "auth_welcomeSubtitle": "Réservez le service de nettoyage parfait pour votre maison",
+
+  "home_greeting": "Bonjour, {name}! 👋",
+  "@home_greeting": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "home_locationBadge": "Monastir, Tunisie",
+  "home_hero_headline": "Faites briller votre maison !",
+  "home_cta": "Réserver maintenant",
+
+  "location_title": "Choisir un emplacement",
+  "location_search_hint": "Rechercher une adresse...",
+  "location_savedAddresses": "Adresses enregistrées",
+  "location_chooseOnMap": "Choisir sur la carte",
+  "location_unavailable_title": "Non disponible dans votre zone",
+  "location_unavailable_body": "Nous couvrons actuellement Monastir et ses environs. Nous arrivons bientôt !",
+
+  "property_title": "Choisir un bien",
+  "property_empty_title": "Aucun bien pour l'instant",
+  "property_empty_body": "Ajoutez votre premier bien pour commencer à réserver",
+  "property_add": "Ajouter un bien",
+  "property_type_apartment": "Appartement",
+  "property_type_house": "Maison",
+  "property_type_villa": "Villa",
+  "property_type_office": "Bureau",
+  "property_rooms": "Chambres",
+  "property_bathrooms": "Salles de bain",
+  "property_size": "Surface (m²)",
+  "property_notes": "Notes supplémentaires",
+  "property_save": "Enregistrer le bien",
+  "property_nickname": "Nom du bien (optionnel)",
+
+  "booking_title": "Choisir un forfait",
+  "booking_standard": "Nettoyage Standard",
+  "booking_deep": "Nettoyage Profond",
+  "booking_moveInOut": "Nettoyage Déménagement",
+  "booking_office": "Nettoyage Bureau",
+  "booking_selectDate": "Choisir la date et l'heure",
+  "booking_confirm": "Confirmer la réservation",
+  "booking_price": "{price} DT",
+  "@booking_price": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+
+  "profile_title": "Mon profil",
+  "profile_save": "Enregistrer les modifications",
+  "profile_editAvatar": "Changer la photo",
+
+  "settings_title": "Paramètres",
+  "settings_profile": "Mon profil",
+  "settings_myProperties": "Mes biens",
+  "settings_myLocations": "Mes adresses",
+  "settings_terms": "Conditions d'utilisation",
+  "settings_privacy": "Politique de confidentialité",
+  "settings_contact": "Nous contacter",
+  "settings_switchToCleaner": "Devenir agent de nettoyage",
+  "settings_logout": "Se déconnecter",
+  "settings_deleteAccount": "Supprimer le compte",
+  "settings_deleteAccount_confirm": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+  "settings_language": "Langue",
+  "settings_language_ar": "العربية",
+  "settings_language_fr": "Français",
+
+  "common_next": "Suivant",
+  "common_back": "Retour",
+  "common_cancel": "Annuler",
+  "common_save": "Enregistrer",
+  "common_delete": "Supprimer",
+  "common_confirm": "Confirmer",
+  "common_loading": "Chargement...",
+  "common_retry": "Réessayer",
+  "common_error_generic": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+  "common_currency": "DT"
+}

@@ -1,0 +1,48 @@
+# Flutter defaults
+.dart_tool/
+.packages
+build/
+*.iml
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+.gradle/
+local.properties
+GeneratedPluginRegistrant.java
+
+# Xcode
+ios/.generated/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Android
+android/local.properties
+android/key.properties
+
+# VS Code
+.vscode/
+.history/
+
+# macOS
+.DS_Store
+
+# ─── SECRETS — NEVER COMMIT ───
+.env
+*.env.local
+*.env.production
+google-services.json
+GoogleService-Info.plist
+
+# Pub cache
+.pub-cache/
+pubspec.lock
+
+# Coverage
+coverage/
