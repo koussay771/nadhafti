@@ -19,12 +19,13 @@ class HomeScreen extends HookConsumerWidget {
     final user = ref.watch(currentUserProvider);
     final packagesAsync = ref.watch(cleaningPackagesProvider);
 
-    final userName = user?.userMetadata?['first_name'] as String? ?? 'صديقنا';
+    final userName = user?.userMetadata?['first_name'] as String? ?? (locale == 'ar' ? 'صديقنا' : 'Client');
 
     return Scaffold(
       backgroundColor: AppColors.background,
       bottomNavigationBar: _HomeBottomNav(
         currentIndex: 0,
+        l10n: l10n,
         onTap: (index) {
           if (index == 1) {
             context.push(AppRoutes.booking);
@@ -124,7 +125,7 @@ class HomeScreen extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'جاهزون لتنظيف بيتك بأعلى معايير الجودة والراحة',
+                  l10n.home_subtitle,
                   style: AppTextStyles.bodyMd.copyWith(
                     color: AppColors.onSurfaceVariant,
                   ),
@@ -134,8 +135,8 @@ class HomeScreen extends HookConsumerWidget {
 
                 // ── Hero Promo Banner ───────────────────────────────────────
                 _HeroPromoBanner(
+                  l10n: l10n,
                   onBookNow: () {
-                    // Preselect first package if available and go to booking
                     packagesAsync.whenData((packages) {
                       if (packages.isNotEmpty) {
                         ref
@@ -154,13 +155,13 @@ class HomeScreen extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'باقات التنظيف',
+                      l10n.home_services_title,
                       style: AppTextStyles.headlineSm.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(
-                      'أسعار ثابتة وشفافة',
+                      l10n.home_services_subtitle,
                       style: AppTextStyles.caption.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
@@ -183,6 +184,7 @@ class HomeScreen extends HookConsumerWidget {
                   ),
                   error: (_, __) => _FallbackPackagesList(
                     locale: locale,
+                    l10n: l10n,
                     onSelect: (pkg) {
                       ref.read(selectedPackageProvider.notifier).select(pkg);
                       context.push(AppRoutes.booking);
@@ -199,6 +201,7 @@ class HomeScreen extends HookConsumerWidget {
                       return _PackageCard(
                         package: package,
                         locale: locale,
+                        l10n: l10n,
                         onTap: () {
                           ref
                               .read(selectedPackageProvider.notifier)
@@ -213,7 +216,7 @@ class HomeScreen extends HookConsumerWidget {
                 const SizedBox(height: AppSpacing.xxl),
 
                 // ── Trust & Quality Guarantees ──────────────────────────────
-                const _TrustGuaranteesSection(),
+                _TrustGuaranteesSection(l10n: l10n),
 
                 const SizedBox(height: AppSpacing.xl),
               ],
@@ -227,8 +230,9 @@ class HomeScreen extends HookConsumerWidget {
 
 // ── Hero Promo Banner Widget ──────────────────────────────────────────────────
 class _HeroPromoBanner extends StatelessWidget {
-  const _HeroPromoBanner({required this.onBookNow});
+  const _HeroPromoBanner({required this.onBookNow, required this.l10n});
   final VoidCallback onBookNow;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -267,13 +271,13 @@ class _HeroPromoBanner extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(AppRadii.full),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.star_rounded, color: Colors.amber, size: 16),
-                    SizedBox(width: 4),
+                    const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
+                    const SizedBox(width: 4),
                     Text(
-                      'خدمة رقم 1 في المنستير',
-                      style: TextStyle(
+                      l10n.home_top_service,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
@@ -285,9 +289,9 @@ class _HeroPromoBanner extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          const Text(
-            'خلّ بيتك يلمع اليوم! ✨',
-            style: TextStyle(
+          Text(
+            l10n.home_hero_headline,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.w800,
@@ -296,7 +300,7 @@ class _HeroPromoBanner extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'حجز فوري في أقل من دقيقة مع عاملات محترفات',
+            l10n.home_instant_booking,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.9),
               fontSize: 14,
@@ -318,18 +322,18 @@ class _HeroPromoBanner extends StatelessWidget {
               ),
               elevation: 0,
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'احجز الآن',
-                  style: TextStyle(
+                  l10n.home_cta,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 15,
                   ),
                 ),
-                SizedBox(width: 6),
-                Icon(Icons.arrow_forward_rounded, size: 18),
+                const SizedBox(width: 6),
+                const Icon(Icons.arrow_forward_rounded, size: 18),
               ],
             ),
           ),
@@ -344,11 +348,13 @@ class _PackageCard extends StatelessWidget {
   const _PackageCard({
     required this.package,
     required this.locale,
+    required this.l10n,
     required this.onTap,
   });
 
   final CleaningPackage package;
   final String locale;
+  final AppLocalizations l10n;
   final VoidCallback onTap;
 
   IconData _getIcon(String iconName) {
@@ -368,6 +374,8 @@ class _PackageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currency = locale == 'ar' ? 'دت' : 'DT';
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -422,7 +430,7 @@ class _PackageCard extends StatelessWidget {
                               child: Text(
                                 package.localizedName(locale),
                                 style: AppTextStyles.labelLg.copyWith(
-                                  fontWeight: FontWeight.w700,
+                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -438,9 +446,9 @@ class _PackageCard extends StatelessWidget {
                                   borderRadius:
                                       BorderRadius.circular(AppRadii.full),
                                 ),
-                                child: const Text(
-                                  'الأكثر طلبًا 🔥',
-                                  style: TextStyle(
+                                child: Text(
+                                  l10n.home_popular_badge,
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 10,
                                     fontWeight: FontWeight.w700,
@@ -460,7 +468,7 @@ class _PackageCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              'حوالي ${package.durationHours} ساعات عمل',
+                              l10n.home_hours_duration(package.durationHours),
                               style: AppTextStyles.caption,
                             ),
                           ],
@@ -480,7 +488,7 @@ class _PackageCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppRadii.full),
                     ),
                     child: Text(
-                      '${package.basePrice.toStringAsFixed(0)} دت',
+                      '${package.basePrice.toStringAsFixed(0)} $currency',
                       style: AppTextStyles.labelLg.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w800,
@@ -512,10 +520,12 @@ class _PackageCard extends StatelessWidget {
 class _FallbackPackagesList extends StatelessWidget {
   const _FallbackPackagesList({
     required this.locale,
+    required this.l10n,
     required this.onSelect,
   });
 
   final String locale;
+  final AppLocalizations l10n;
   final void Function(CleaningPackage) onSelect;
 
   @override
@@ -531,6 +541,7 @@ class _FallbackPackagesList extends StatelessWidget {
         return _PackageCard(
           package: package,
           locale: locale,
+          l10n: l10n,
           onTap: () => onSelect(package),
         );
       },
@@ -540,7 +551,8 @@ class _FallbackPackagesList extends StatelessWidget {
 
 // ── Trust & Quality Guarantees ────────────────────────────────────────────────
 class _TrustGuaranteesSection extends StatelessWidget {
-  const _TrustGuaranteesSection();
+  const _TrustGuaranteesSection({required this.l10n});
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -554,28 +566,28 @@ class _TrustGuaranteesSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'لماذا تختار نظافتي؟',
+            l10n.home_trust_title,
             style: AppTextStyles.labelLg.copyWith(
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          const _TrustItem(
+          _TrustItem(
             icon: Icons.verified_user_rounded,
-            title: 'عاملات موثوقات وذوات خبرة',
-            subtitle: 'تم التحقق من الهوية والخبرة المهنية لجميع العاملات',
+            title: l10n.home_trust_1_title,
+            subtitle: l10n.home_trust_1_sub,
           ),
           const SizedBox(height: AppSpacing.sm),
-          const _TrustItem(
+          _TrustItem(
             icon: Icons.price_check_rounded,
-            title: 'أسعار واضحة ودون مفاجآت',
-            subtitle: 'الدفع عند إتمام الخدمة بكل شفافية وأمان',
+            title: l10n.home_trust_2_title,
+            subtitle: l10n.home_trust_2_sub,
           ),
           const SizedBox(height: AppSpacing.sm),
-          const _TrustItem(
+          _TrustItem(
             icon: Icons.thumb_up_rounded,
-            title: 'ضمان الرضا 100%',
-            subtitle: 'إذا لم تكن راضيًا عن النتيجة، سنعيد تنظيف الجزء مجانًا',
+            title: l10n.home_trust_3_title,
+            subtitle: l10n.home_trust_3_sub,
           ),
         ],
       ),
@@ -630,10 +642,12 @@ class _TrustItem extends StatelessWidget {
 class _HomeBottomNav extends StatelessWidget {
   const _HomeBottomNav({
     required this.currentIndex,
+    required this.l10n,
     required this.onTap,
   });
 
   final int currentIndex;
+  final AppLocalizations l10n;
   final ValueChanged<int> onTap;
 
   @override
@@ -650,28 +664,28 @@ class _HomeBottomNav extends StatelessWidget {
         onDestinationSelected: onTap,
         backgroundColor: AppColors.surface,
         indicatorColor: AppColors.primaryContainer,
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded, color: AppColors.primary),
-            label: 'الرئيسية',
+            icon: const Icon(Icons.home_outlined),
+            selectedIcon: const Icon(Icons.home_rounded, color: AppColors.primary),
+            label: l10n.nav_home,
           ),
           NavigationDestination(
-            icon: Icon(Icons.calendar_month_outlined),
+            icon: const Icon(Icons.calendar_month_outlined),
             selectedIcon:
-                Icon(Icons.calendar_month_rounded, color: AppColors.primary),
-            label: 'الحجوزات',
+                const Icon(Icons.calendar_month_rounded, color: AppColors.primary),
+            label: l10n.nav_bookings,
           ),
           NavigationDestination(
-            icon: Icon(Icons.map_outlined),
-            selectedIcon: Icon(Icons.map_rounded, color: AppColors.primary),
-            label: 'الخريطة',
+            icon: const Icon(Icons.map_outlined),
+            selectedIcon: const Icon(Icons.map_rounded, color: AppColors.primary),
+            label: l10n.nav_map,
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
+            icon: const Icon(Icons.settings_outlined),
             selectedIcon:
-                Icon(Icons.settings_rounded, color: AppColors.primary),
-            label: 'الإعدادات',
+                const Icon(Icons.settings_rounded, color: AppColors.primary),
+            label: l10n.nav_settings,
           ),
         ],
       ),

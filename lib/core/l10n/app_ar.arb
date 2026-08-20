@@ -35,15 +35,39 @@
   "auth_welcome": "مرحبًا بك في نظافتي 👋",
   "auth_welcomeSubtitle": "احجز خدمة التنظيف المثالية لبيتك",
 
+  "nav_home": "الرئيسية",
+  "nav_bookings": "الحجوزات",
+  "nav_map": "الخريطة",
+  "nav_settings": "الإعدادات",
+
   "home_greeting": "مرحبًا، {name}! 👋",
   "@home_greeting": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "home_subtitle": "جاهزون لتنظيف بيتك بأعلى معايير الجودة والراحة",
   "home_locationBadge": "المنستير، تونس",
-  "home_hero_headline": "خلّ بيتك يلمع اليوم!",
+  "home_hero_headline": "خلّ بيتك يلمع اليوم! ✨",
   "home_cta": "احجز الآن",
+  "home_top_service": "خدمة رقم 1 في المنستير",
+  "home_instant_booking": "حجز فوري في أقل من دقيقة مع عاملات محترفات",
+  "home_services_title": "باقات التنظيف",
+  "home_services_subtitle": "أسعار ثابتة وشفافة",
+  "home_popular_badge": "الأكثر طلبًا 🔥",
+  "home_hours_duration": "حوالي {hours} ساعات عمل",
+  "@home_hours_duration": {
+    "placeholders": {
+      "hours": { "type": "int" }
+    }
+  },
+  "home_trust_title": "لماذا تختار نظافتي؟",
+  "home_trust_1_title": "عاملات موثوقات وذوات خبرة",
+  "home_trust_1_sub": "تم التحقق من الهوية والخبرة المهنية لجميع العاملات",
+  "home_trust_2_title": "أسعار واضحة ودون مفاجآت",
+  "home_trust_2_sub": "الدفع عند إتمام الخدمة بكل شفافية وأمان",
+  "home_trust_3_title": "ضمان الرضا 100%",
+  "home_trust_3_sub": "إذا لم تكن راضيًا عن النتيجة، سنعيد تنظيف الجزء مجانًا",
 
   "location_title": "اختر الموقع",
   "location_search_hint": "ابحث عن عنوانك...",
@@ -67,12 +91,29 @@
   "property_save": "حفظ العقار",
   "property_nickname": "اسم العقار (اختياري)",
 
-  "booking_title": "اختر الباقة",
+  "booking_title": "حجز الخدمة",
+  "booking_select_package_title": "باقة التنظيف المختارة",
   "booking_standard": "تنظيف عادي",
   "booking_deep": "تنظيف عميق",
   "booking_moveInOut": "تنظيف عند الانتقال",
-  "booking_office": "تنظيف مكتب",
+  "booking_office": "تنظيف مكاتب ومحلات",
   "booking_selectDate": "اختر التاريخ والوقت",
+  "booking_choose_date": "اختر التاريخ",
+  "booking_choose_time": "اختر التوقيت المناسب",
+  "booking_addons_title": "خدمات إضافية حسب الطلب",
+  "booking_payment_title": "طريقة الدفع",
+  "booking_payment_cash": "الدفع نقدًا عند إتمام الخدمة (Espèces)",
+  "booking_payment_cash_desc": "تدفع للعاملة مباشرة بعد فحص ومعاينة النظافة",
+  "booking_total": "المبلغ الإجمالي:",
+  "booking_confirm_cta": "تأكيد الحجز الفوري",
+  "booking_change": "تغيير",
+  "booking_success_title": "تم تأكيد حجزك بنجاح! 🎉",
+  "booking_num": "رقم الحجز:",
+  "booking_package_label": "الباقة:",
+  "booking_date_label": "الموعد:",
+  "booking_address_label": "العنوان:",
+  "booking_total_label": "المجموع:",
+  "booking_return_home": "العودة إلى الرئيسية",
   "booking_confirm": "تأكيد الحجز",
   "booking_price": "{price} دت",
   "@booking_price": {

@@ -96,18 +96,79 @@ class AppLocalizationsFr extends AppLocalizations {
       'Réservez le service de nettoyage parfait pour votre maison';
 
   @override
+  String get nav_home => 'Accueil';
+
+  @override
+  String get nav_bookings => 'Réservations';
+
+  @override
+  String get nav_map => 'Carte';
+
+  @override
+  String get nav_settings => 'Paramètres';
+
+  @override
   String home_greeting(String name) {
     return 'Bonjour, $name! 👋';
   }
 
   @override
+  String get home_subtitle =>
+      'Prêts à faire briller votre maison avec les meilleurs standards';
+
+  @override
   String get home_locationBadge => 'Monastir, Tunisie';
 
   @override
-  String get home_hero_headline => 'Faites briller votre maison !';
+  String get home_hero_headline => 'Faites briller votre maison ! ✨';
 
   @override
   String get home_cta => 'Réserver maintenant';
+
+  @override
+  String get home_top_service => 'Service N°1 à Monastir';
+
+  @override
+  String get home_instant_booking =>
+      'Réservation instantanée en moins d\'une minute avec des professionnelles';
+
+  @override
+  String get home_services_title => 'Forfaits de ménage';
+
+  @override
+  String get home_services_subtitle => 'Tarifs fixes et transparents';
+
+  @override
+  String get home_popular_badge => 'Le plus demandé 🔥';
+
+  @override
+  String home_hours_duration(int hours) {
+    return 'Environ ${hours}h de travail';
+  }
+
+  @override
+  String get home_trust_title => 'Pourquoi choisir Nadhafti ?';
+
+  @override
+  String get home_trust_1_title => 'Professionnelles fiables et expérimentées';
+
+  @override
+  String get home_trust_1_sub =>
+      'Identité et expérience vérifiées pour chaque intervenante';
+
+  @override
+  String get home_trust_2_title => 'Tarifs clairs sans surprises';
+
+  @override
+  String get home_trust_2_sub =>
+      'Paiement à la fin de la prestation en toute transparence';
+
+  @override
+  String get home_trust_3_title => 'Garantie satisfaction 100%';
+
+  @override
+  String get home_trust_3_sub =>
+      'Si vous n\'êtes pas satisfait, nous repassons gratuitement';
 
   @override
   String get location_title => 'Choisir un emplacement';
@@ -172,7 +233,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get property_nickname => 'Nom du bien (optionnel)';
 
   @override
-  String get booking_title => 'Choisir un forfait';
+  String get booking_title => 'Réservation';
+
+  @override
+  String get booking_select_package_title => 'Forfait sélectionné';
 
   @override
   String get booking_standard => 'Nettoyage Standard';
@@ -188,6 +252,56 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get booking_selectDate => 'Choisir la date et l\'heure';
+
+  @override
+  String get booking_choose_date => 'Choisir la date';
+
+  @override
+  String get booking_choose_time => 'Choisir l\'horaire';
+
+  @override
+  String get booking_addons_title => 'Options supplémentaires';
+
+  @override
+  String get booking_payment_title => 'Mode de paiement';
+
+  @override
+  String get booking_payment_cash =>
+      'Paiement en espèces à la livraison (Espèces)';
+
+  @override
+  String get booking_payment_cash_desc =>
+      'Payez directement l\'intervenante après inspection du travail';
+
+  @override
+  String get booking_total => 'Montant total :';
+
+  @override
+  String get booking_confirm_cta => 'Confirmer la réservation';
+
+  @override
+  String get booking_change => 'Modifier';
+
+  @override
+  String get booking_success_title => 'Réservation confirmée avec succès ! 🎉';
+
+  @override
+  String get booking_num => 'N° de réservation :';
+
+  @override
+  String get booking_package_label => 'Forfait :';
+
+  @override
+  String get booking_date_label => 'Rendez-vous :';
+
+  @override
+  String get booking_address_label => 'Adresse :';
+
+  @override
+  String get booking_total_label => 'Total :';
+
+  @override
+  String get booking_return_home => 'Retour à l\'accueil';
 
   @override
   String get booking_confirm => 'Confirmer la réservation';

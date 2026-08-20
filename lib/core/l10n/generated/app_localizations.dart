@@ -260,11 +260,41 @@ abstract class AppLocalizations {
   /// **'احجز خدمة التنظيف المثالية لبيتك'**
   String get auth_welcomeSubtitle;
 
+  /// No description provided for @nav_home.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرئيسية'**
+  String get nav_home;
+
+  /// No description provided for @nav_bookings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجوزات'**
+  String get nav_bookings;
+
+  /// No description provided for @nav_map.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخريطة'**
+  String get nav_map;
+
+  /// No description provided for @nav_settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
+  String get nav_settings;
+
   /// No description provided for @home_greeting.
   ///
   /// In ar, this message translates to:
   /// **'مرحبًا، {name}! 👋'**
   String home_greeting(String name);
+
+  /// No description provided for @home_subtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهزون لتنظيف بيتك بأعلى معايير الجودة والراحة'**
+  String get home_subtitle;
 
   /// No description provided for @home_locationBadge.
   ///
@@ -275,7 +305,7 @@ abstract class AppLocalizations {
   /// No description provided for @home_hero_headline.
   ///
   /// In ar, this message translates to:
-  /// **'خلّ بيتك يلمع اليوم!'**
+  /// **'خلّ بيتك يلمع اليوم! ✨'**
   String get home_hero_headline;
 
   /// No description provided for @home_cta.
@@ -283,6 +313,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'احجز الآن'**
   String get home_cta;
+
+  /// No description provided for @home_top_service.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة رقم 1 في المنستير'**
+  String get home_top_service;
+
+  /// No description provided for @home_instant_booking.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز فوري في أقل من دقيقة مع عاملات محترفات'**
+  String get home_instant_booking;
+
+  /// No description provided for @home_services_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقات التنظيف'**
+  String get home_services_title;
+
+  /// No description provided for @home_services_subtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسعار ثابتة وشفافة'**
+  String get home_services_subtitle;
+
+  /// No description provided for @home_popular_badge.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأكثر طلبًا 🔥'**
+  String get home_popular_badge;
+
+  /// No description provided for @home_hours_duration.
+  ///
+  /// In ar, this message translates to:
+  /// **'حوالي {hours} ساعات عمل'**
+  String home_hours_duration(int hours);
+
+  /// No description provided for @home_trust_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'لماذا تختار نظافتي؟'**
+  String get home_trust_title;
+
+  /// No description provided for @home_trust_1_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'عاملات موثوقات وذوات خبرة'**
+  String get home_trust_1_title;
+
+  /// No description provided for @home_trust_1_sub.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التحقق من الهوية والخبرة المهنية لجميع العاملات'**
+  String get home_trust_1_sub;
+
+  /// No description provided for @home_trust_2_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسعار واضحة ودون مفاجآت'**
+  String get home_trust_2_title;
+
+  /// No description provided for @home_trust_2_sub.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع عند إتمام الخدمة بكل شفافية وأمان'**
+  String get home_trust_2_sub;
+
+  /// No description provided for @home_trust_3_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمان الرضا 100%'**
+  String get home_trust_3_title;
+
+  /// No description provided for @home_trust_3_sub.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا لم تكن راضيًا عن النتيجة، سنعيد تنظيف الجزء مجانًا'**
+  String get home_trust_3_sub;
 
   /// No description provided for @location_title.
   ///
@@ -407,8 +515,14 @@ abstract class AppLocalizations {
   /// No description provided for @booking_title.
   ///
   /// In ar, this message translates to:
-  /// **'اختر الباقة'**
+  /// **'حجز الخدمة'**
   String get booking_title;
+
+  /// No description provided for @booking_select_package_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقة التنظيف المختارة'**
+  String get booking_select_package_title;
 
   /// No description provided for @booking_standard.
   ///
@@ -431,7 +545,7 @@ abstract class AppLocalizations {
   /// No description provided for @booking_office.
   ///
   /// In ar, this message translates to:
-  /// **'تنظيف مكتب'**
+  /// **'تنظيف مكاتب ومحلات'**
   String get booking_office;
 
   /// No description provided for @booking_selectDate.
@@ -439,6 +553,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اختر التاريخ والوقت'**
   String get booking_selectDate;
+
+  /// No description provided for @booking_choose_date.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر التاريخ'**
+  String get booking_choose_date;
+
+  /// No description provided for @booking_choose_time.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر التوقيت المناسب'**
+  String get booking_choose_time;
+
+  /// No description provided for @booking_addons_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمات إضافية حسب الطلب'**
+  String get booking_addons_title;
+
+  /// No description provided for @booking_payment_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع'**
+  String get booking_payment_title;
+
+  /// No description provided for @booking_payment_cash.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع نقدًا عند إتمام الخدمة (Espèces)'**
+  String get booking_payment_cash;
+
+  /// No description provided for @booking_payment_cash_desc.
+  ///
+  /// In ar, this message translates to:
+  /// **'تدفع للعاملة مباشرة بعد فحص ومعاينة النظافة'**
+  String get booking_payment_cash_desc;
+
+  /// No description provided for @booking_total.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ الإجمالي:'**
+  String get booking_total;
+
+  /// No description provided for @booking_confirm_cta.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الحجز الفوري'**
+  String get booking_confirm_cta;
+
+  /// No description provided for @booking_change.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير'**
+  String get booking_change;
+
+  /// No description provided for @booking_success_title.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد حجزك بنجاح! 🎉'**
+  String get booking_success_title;
+
+  /// No description provided for @booking_num.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الحجز:'**
+  String get booking_num;
+
+  /// No description provided for @booking_package_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباقة:'**
+  String get booking_package_label;
+
+  /// No description provided for @booking_date_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد:'**
+  String get booking_date_label;
+
+  /// No description provided for @booking_address_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان:'**
+  String get booking_address_label;
+
+  /// No description provided for @booking_total_label.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموع:'**
+  String get booking_total_label;
+
+  /// No description provided for @booking_return_home.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة إلى الرئيسية'**
+  String get booking_return_home;
 
   /// No description provided for @booking_confirm.
   ///

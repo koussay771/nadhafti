@@ -93,18 +93,77 @@ class AppLocalizationsAr extends AppLocalizations {
   String get auth_welcomeSubtitle => 'احجز خدمة التنظيف المثالية لبيتك';
 
   @override
+  String get nav_home => 'الرئيسية';
+
+  @override
+  String get nav_bookings => 'الحجوزات';
+
+  @override
+  String get nav_map => 'الخريطة';
+
+  @override
+  String get nav_settings => 'الإعدادات';
+
+  @override
   String home_greeting(String name) {
     return 'مرحبًا، $name! 👋';
   }
 
   @override
+  String get home_subtitle => 'جاهزون لتنظيف بيتك بأعلى معايير الجودة والراحة';
+
+  @override
   String get home_locationBadge => 'المنستير، تونس';
 
   @override
-  String get home_hero_headline => 'خلّ بيتك يلمع اليوم!';
+  String get home_hero_headline => 'خلّ بيتك يلمع اليوم! ✨';
 
   @override
   String get home_cta => 'احجز الآن';
+
+  @override
+  String get home_top_service => 'خدمة رقم 1 في المنستير';
+
+  @override
+  String get home_instant_booking =>
+      'حجز فوري في أقل من دقيقة مع عاملات محترفات';
+
+  @override
+  String get home_services_title => 'باقات التنظيف';
+
+  @override
+  String get home_services_subtitle => 'أسعار ثابتة وشفافة';
+
+  @override
+  String get home_popular_badge => 'الأكثر طلبًا 🔥';
+
+  @override
+  String home_hours_duration(int hours) {
+    return 'حوالي $hours ساعات عمل';
+  }
+
+  @override
+  String get home_trust_title => 'لماذا تختار نظافتي؟';
+
+  @override
+  String get home_trust_1_title => 'عاملات موثوقات وذوات خبرة';
+
+  @override
+  String get home_trust_1_sub =>
+      'تم التحقق من الهوية والخبرة المهنية لجميع العاملات';
+
+  @override
+  String get home_trust_2_title => 'أسعار واضحة ودون مفاجآت';
+
+  @override
+  String get home_trust_2_sub => 'الدفع عند إتمام الخدمة بكل شفافية وأمان';
+
+  @override
+  String get home_trust_3_title => 'ضمان الرضا 100%';
+
+  @override
+  String get home_trust_3_sub =>
+      'إذا لم تكن راضيًا عن النتيجة، سنعيد تنظيف الجزء مجانًا';
 
   @override
   String get location_title => 'اختر الموقع';
@@ -168,7 +227,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get property_nickname => 'اسم العقار (اختياري)';
 
   @override
-  String get booking_title => 'اختر الباقة';
+  String get booking_title => 'حجز الخدمة';
+
+  @override
+  String get booking_select_package_title => 'باقة التنظيف المختارة';
 
   @override
   String get booking_standard => 'تنظيف عادي';
@@ -180,10 +242,59 @@ class AppLocalizationsAr extends AppLocalizations {
   String get booking_moveInOut => 'تنظيف عند الانتقال';
 
   @override
-  String get booking_office => 'تنظيف مكتب';
+  String get booking_office => 'تنظيف مكاتب ومحلات';
 
   @override
   String get booking_selectDate => 'اختر التاريخ والوقت';
+
+  @override
+  String get booking_choose_date => 'اختر التاريخ';
+
+  @override
+  String get booking_choose_time => 'اختر التوقيت المناسب';
+
+  @override
+  String get booking_addons_title => 'خدمات إضافية حسب الطلب';
+
+  @override
+  String get booking_payment_title => 'طريقة الدفع';
+
+  @override
+  String get booking_payment_cash => 'الدفع نقدًا عند إتمام الخدمة (Espèces)';
+
+  @override
+  String get booking_payment_cash_desc =>
+      'تدفع للعاملة مباشرة بعد فحص ومعاينة النظافة';
+
+  @override
+  String get booking_total => 'المبلغ الإجمالي:';
+
+  @override
+  String get booking_confirm_cta => 'تأكيد الحجز الفوري';
+
+  @override
+  String get booking_change => 'تغيير';
+
+  @override
+  String get booking_success_title => 'تم تأكيد حجزك بنجاح! 🎉';
+
+  @override
+  String get booking_num => 'رقم الحجز:';
+
+  @override
+  String get booking_package_label => 'الباقة:';
+
+  @override
+  String get booking_date_label => 'الموعد:';
+
+  @override
+  String get booking_address_label => 'العنوان:';
+
+  @override
+  String get booking_total_label => 'المجموع:';
+
+  @override
+  String get booking_return_home => 'العودة إلى الرئيسية';
 
   @override
   String get booking_confirm => 'تأكيد الحجز';

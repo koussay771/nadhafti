@@ -24,22 +24,21 @@ class BookingScreen extends StatefulHookConsumerWidget {
 
 class _BookingScreenState extends ConsumerState<BookingScreen> {
   late DateTime _selectedDate;
-  String _selectedTimeSlot = '08:30 ص';
+  int _selectedTimeIndex = 0;
   final Set<String> _selectedAddOnIds = {};
   final TextEditingController _notesCtrl = TextEditingController();
   bool _isLoading = false;
 
-  static const List<String> _timeSlots = [
-    '08:30 ص',
-    '11:00 ص',
-    '02:00 م',
-    '04:30 م',
+  static const List<Map<String, String>> _timeSlotOptions = [
+    {'ar': '08:30 ص', 'fr': '08:30'},
+    {'ar': '11:00 ص', 'fr': '11:00'},
+    {'ar': '02:00 م', 'fr': '14:00'},
+    {'ar': '04:30 م', 'fr': '16:30'},
   ];
 
   @override
   void initState() {
     super.initState();
-    // Default scheduled date: tomorrow
     _selectedDate = DateTime.now().add(const Duration(days: 1));
   }
 
@@ -63,21 +62,26 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     required CleaningPackage package,
     required Property property,
     required String addressText,
+    required String locale,
+    required AppLocalizations l10n,
   }) async {
     setState(() => _isLoading = true);
 
     final total = _calculateTotal(package.basePrice);
+    final timeSlot = locale == 'ar'
+        ? _timeSlotOptions[_selectedTimeIndex]['ar']!
+        : _timeSlotOptions[_selectedTimeIndex]['fr']!;
 
     final booking = await ref
         .read(userBookingsProvider.notifier)
         .createBooking(
           packageId: package.id,
-          packageName: package.nameAr,
+          packageName: package.localizedName(locale),
           propertyId: property.id,
           propertyName: property.name,
           addressText: addressText,
           scheduledDate: _selectedDate,
-          timeSlot: _selectedTimeSlot,
+          timeSlot: timeSlot,
           basePrice: package.basePrice,
           addOns: _selectedAddOnIds.toList(),
           totalPrice: total,
@@ -89,11 +93,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     setState(() => _isLoading = false);
 
     if (mounted) {
-      _showSuccessDialog(booking);
+      _showSuccessDialog(booking, locale, l10n);
     }
   }
 
-  void _showSuccessDialog(Booking booking) {
+  void _showSuccessDialog(Booking booking, String locale, AppLocalizations l10n) {
+    final currency = locale == 'ar' ? 'دت' : 'DT';
+    final dateFormat = locale == 'ar' ? 'yyyy/MM/dd' : 'dd/MM/yyyy';
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -120,7 +127,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'تم تأكيد حجزك بنجاح! 🎉',
+              l10n.booking_success_title,
               style: AppTextStyles.headlineSm.copyWith(
                 fontWeight: FontWeight.w800,
               ),
@@ -128,7 +135,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'رقم الحجز: #${booking.id.substring(booking.id.length - 6)}',
+              '${l10n.booking_num} #${booking.id.length > 6 ? booking.id.substring(booking.id.length - 6) : booking.id}',
               style: AppTextStyles.caption.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.w700,
@@ -143,26 +150,26 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               ),
               child: Column(
                 children: [
-                  _SummaryRow(label: 'الباقة:', value: booking.packageName),
+                  _SummaryRow(label: l10n.booking_package_label, value: booking.packageName),
                   _SummaryRow(
-                    label: 'الموعد:',
+                    label: l10n.booking_date_label,
                     value:
-                        '${DateFormat('yyyy/MM/dd').format(booking.scheduledDate)} - ${booking.timeSlot}',
+                        '${DateFormat(dateFormat).format(booking.scheduledDate)} - ${booking.timeSlot}',
                   ),
                   _SummaryRow(
-                    label: 'العنوان:',
+                    label: l10n.booking_address_label,
                     value: booking.addressText,
                   ),
                   _SummaryRow(
-                    label: 'المجموع:',
-                    value: '${booking.totalPrice.toStringAsFixed(0)} دت',
+                    label: l10n.booking_total_label,
+                    value: '${booking.totalPrice.toStringAsFixed(0)} $currency',
                   ),
                 ],
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
             NadhaftiButton(
-              label: 'العودة إلى الرئيسية',
+              label: l10n.booking_return_home,
               onPressed: () {
                 Navigator.of(ctx).pop();
                 context.go(AppRoutes.home);
@@ -177,13 +184,19 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final selectedPackage =
-        ref.watch(selectedPackageProvider) ?? CleaningPackage.fallbackPackages.first;
+    final locale = Localizations.localeOf(context).languageCode;
+    final currency = locale == 'ar' ? 'دت' : 'DT';
+
+    final packagesAsync = ref.watch(cleaningPackagesProvider);
+    final allPackages = packagesAsync.asData?.value ?? CleaningPackage.fallbackPackages;
+
+    // Use current selected package, or fallback to first
+    final selectedPackage = ref.watch(selectedPackageProvider) ?? allPackages.first;
     final selectedProperty =
         ref.watch(selectedPropertyProvider) ?? Property.sampleDefault;
     final selectedAddress = ref.watch(selectedAddressProvider);
 
-    final addressText = selectedAddress?.fullAddress ?? 'المنستير، تونس';
+    final addressText = selectedAddress?.fullAddress ?? (locale == 'ar' ? 'المنستير، تونس' : 'Monastir, Tunisie');
     final totalPrice = _calculateTotal(selectedPackage.basePrice);
 
     return Scaffold(
@@ -208,16 +221,16 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'المبلغ الإجمالي:',
-                    style: TextStyle(
+                  Text(
+                    l10n.booking_total,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
                   Text(
-                    '${totalPrice.toStringAsFixed(0)} دت',
+                    '${totalPrice.toStringAsFixed(0)} $currency',
                     style: AppTextStyles.headlineSm.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w800,
@@ -227,12 +240,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               ),
               const SizedBox(height: AppSpacing.sm),
               NadhaftiButton(
-                label: 'تأكيد الحجز الفوري',
+                label: l10n.booking_confirm_cta,
                 isLoading: _isLoading,
                 onPressed: () => _handleConfirmBooking(
                   package: selectedPackage,
                   property: selectedProperty,
                   addressText: addressText,
+                  locale: locale,
+                  l10n: l10n,
                 ),
               ),
             ],
@@ -248,7 +263,100 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ── Selected Summary Card ─────────────────────────────────────
+              // ── Package Horizontal Selector ──────────────────────────────
+              Text(
+                l10n.booking_select_package_title,
+                style: AppTextStyles.labelLg.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              SizedBox(
+                height: 90,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: allPackages.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 10),
+                  itemBuilder: (context, index) {
+                    final pkg = allPackages[index];
+                    final isSelected = pkg.id == selectedPackage.id;
+
+                    return GestureDetector(
+                      onTap: () {
+                        ref.read(selectedPackageProvider.notifier).select(pkg);
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 150,
+                        padding: const EdgeInsets.all(AppSpacing.sm),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColors.primaryContainer.withValues(alpha: 0.5)
+                              : AppColors.surface,
+                          borderRadius: BorderRadius.circular(AppRadii.lg),
+                          border: Border.all(
+                            color: isSelected
+                                ? AppColors.primary
+                                : AppColors.outlineVariant,
+                            width: isSelected ? 2 : 1,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  isSelected
+                                      ? Icons.check_circle_rounded
+                                      : Icons.cleaning_services_rounded,
+                                  size: 18,
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : AppColors.onSurfaceVariant,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    pkg.localizedName(locale),
+                                    style: TextStyle(
+                                      fontWeight: isSelected
+                                          ? FontWeight.w800
+                                          : FontWeight.w600,
+                                      fontSize: 12,
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : AppColors.onSurface,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              '${pkg.basePrice.toStringAsFixed(0)} $currency',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 15,
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: AppSpacing.lg),
+
+              // ── Summary Card (Property & Location) ────────────────────────
               Container(
                 padding: const EdgeInsets.all(AppSpacing.md),
                 decoration: BoxDecoration(
@@ -261,32 +369,6 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     Row(
                       children: [
                         const Icon(
-                          Icons.cleaning_services_rounded,
-                          color: AppColors.primary,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            selectedPackage.nameAr,
-                            style: AppTextStyles.labelLg.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '${selectedPackage.basePrice.toStringAsFixed(0)} دت',
-                          style: AppTextStyles.labelLg.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(height: AppSpacing.md),
-                    Row(
-                      children: [
-                        const Icon(
                           Icons.home_rounded,
                           color: AppColors.secondary,
                           size: 20,
@@ -294,7 +376,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            '${selectedProperty.name} (${selectedProperty.type.labelAr})',
+                            '${selectedProperty.name} (${locale == 'ar' ? selectedProperty.type.labelAr : selectedProperty.type.name})',
                             style: AppTextStyles.bodyMd,
                           ),
                         ),
@@ -305,7 +387,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                             minimumSize: Size.zero,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                          child: const Text('تغيير'),
+                          child: Text(l10n.booking_change),
                         ),
                       ],
                     ),
@@ -333,7 +415,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                             minimumSize: Size.zero,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                          child: const Text('تغيير'),
+                          child: Text(l10n.booking_change),
                         ),
                       ],
                     ),
@@ -345,7 +427,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
               // ── Date Selector ─────────────────────────────────────────────
               Text(
-                'اختر التاريخ',
+                l10n.booking_choose_date,
                 style: AppTextStyles.labelLg.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -361,7 +443,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     final date = DateTime.now().add(Duration(days: index + 1));
                     final isSelected = DateUtils.isSameDay(date, _selectedDate);
 
-                    final dayName = DateFormat('E', 'ar').format(date);
+                    final dayName = DateFormat('E', locale).format(date);
                     final dayNum = DateFormat('d').format(date);
 
                     return GestureDetector(
@@ -416,7 +498,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
               // ── Time Slots ────────────────────────────────────────────────
               Text(
-                'اختر التوقيت المناسب',
+                l10n.booking_choose_time,
                 style: AppTextStyles.labelLg.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -425,10 +507,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: _timeSlots.map((slot) {
-                  final isSelected = slot == _selectedTimeSlot;
+                children: List.generate(_timeSlotOptions.length, (idx) {
+                  final isSelected = idx == _selectedTimeIndex;
+                  final slotText = locale == 'ar'
+                      ? _timeSlotOptions[idx]['ar']!
+                      : _timeSlotOptions[idx]['fr']!;
+
                   return ChoiceChip(
-                    label: Text(slot),
+                    label: Text(slotText),
                     selected: isSelected,
                     selectedColor: AppColors.primaryContainer,
                     labelStyle: TextStyle(
@@ -437,16 +523,16 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                       fontWeight:
                           isSelected ? FontWeight.w700 : FontWeight.w500,
                     ),
-                    onSelected: (_) => setState(() => _selectedTimeSlot = slot),
+                    onSelected: (_) => setState(() => _selectedTimeIndex = idx),
                   );
-                }).toList(),
+                }),
               ),
 
               const SizedBox(height: AppSpacing.xl),
 
               // ── Optional Add-ons ──────────────────────────────────────────
               Text(
-                'خدمات إضافية حسب الطلب',
+                l10n.booking_addons_title,
                 style: AppTextStyles.labelLg.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -454,6 +540,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               const SizedBox(height: AppSpacing.sm),
               ...BookingAddOn.availableAddOns.map((addon) {
                 final isChecked = _selectedAddOnIds.contains(addon.id);
+                final addonName = locale == 'ar' ? addon.nameAr : addon.nameFr;
+
                 return Container(
                   margin: const EdgeInsets.only(bottom: AppSpacing.sm),
                   decoration: BoxDecoration(
@@ -469,14 +557,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     value: isChecked,
                     activeColor: AppColors.primary,
                     title: Text(
-                      addon.nameAr,
+                      addonName,
                       style: AppTextStyles.bodyMd.copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                       ),
                     ),
                     secondary: Text(
-                      '+${addon.price.toStringAsFixed(0)} دت',
+                      '+${addon.price.toStringAsFixed(0)} $currency',
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         color: AppColors.primary,
@@ -499,7 +587,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
               // ── Payment method ────────────────────────────────────────────
               Text(
-                'طريقة الدفع',
+                l10n.booking_payment_title,
                 style: AppTextStyles.labelLg.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -512,28 +600,28 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   borderRadius: BorderRadius.circular(AppRadii.md),
                   border: Border.all(color: AppColors.primary, width: 1.5),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.payments_rounded,
                       color: AppColors.primary,
                       size: 24,
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'الدفع نقدًا عند إتمام الخدمة (Espèces)',
-                            style: TextStyle(
+                            l10n.booking_payment_cash,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 13,
                             ),
                           ),
                           Text(
-                            'تدفع للعاملة مباشرة بعد فحص ومعاينة النظافة',
-                            style: TextStyle(
+                            l10n.booking_payment_cash_desc,
+                            style: const TextStyle(
                               fontSize: 11,
                               color: AppColors.onSurfaceVariant,
                             ),
@@ -541,7 +629,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                         ],
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.check_circle_rounded,
                       color: AppColors.primary,
                       size: 20,

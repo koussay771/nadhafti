@@ -35,15 +35,39 @@
   "auth_welcome": "Bienvenue sur Nadhafti 👋",
   "auth_welcomeSubtitle": "Réservez le service de nettoyage parfait pour votre maison",
 
+  "nav_home": "Accueil",
+  "nav_bookings": "Réservations",
+  "nav_map": "Carte",
+  "nav_settings": "Paramètres",
+
   "home_greeting": "Bonjour, {name}! 👋",
   "@home_greeting": {
     "placeholders": {
       "name": { "type": "String" }
     }
   },
+  "home_subtitle": "Prêts à faire briller votre maison avec les meilleurs standards",
   "home_locationBadge": "Monastir, Tunisie",
-  "home_hero_headline": "Faites briller votre maison !",
+  "home_hero_headline": "Faites briller votre maison ! ✨",
   "home_cta": "Réserver maintenant",
+  "home_top_service": "Service N°1 à Monastir",
+  "home_instant_booking": "Réservation instantanée en moins d'une minute avec des professionnelles",
+  "home_services_title": "Forfaits de ménage",
+  "home_services_subtitle": "Tarifs fixes et transparents",
+  "home_popular_badge": "Le plus demandé 🔥",
+  "home_hours_duration": "Environ {hours}h de travail",
+  "@home_hours_duration": {
+    "placeholders": {
+      "hours": { "type": "int" }
+    }
+  },
+  "home_trust_title": "Pourquoi choisir Nadhafti ?",
+  "home_trust_1_title": "Professionnelles fiables et expérimentées",
+  "home_trust_1_sub": "Identité et expérience vérifiées pour chaque intervenante",
+  "home_trust_2_title": "Tarifs clairs sans surprises",
+  "home_trust_2_sub": "Paiement à la fin de la prestation en toute transparence",
+  "home_trust_3_title": "Garantie satisfaction 100%",
+  "home_trust_3_sub": "Si vous n'êtes pas satisfait, nous repassons gratuitement",
 
   "location_title": "Choisir un emplacement",
   "location_search_hint": "Rechercher une adresse...",
@@ -67,12 +91,29 @@
   "property_save": "Enregistrer le bien",
   "property_nickname": "Nom du bien (optionnel)",
 
-  "booking_title": "Choisir un forfait",
+  "booking_title": "Réservation",
+  "booking_select_package_title": "Forfait sélectionné",
   "booking_standard": "Nettoyage Standard",
   "booking_deep": "Nettoyage Profond",
   "booking_moveInOut": "Nettoyage Déménagement",
   "booking_office": "Nettoyage Bureau",
   "booking_selectDate": "Choisir la date et l'heure",
+  "booking_choose_date": "Choisir la date",
+  "booking_choose_time": "Choisir l'horaire",
+  "booking_addons_title": "Options supplémentaires",
+  "booking_payment_title": "Mode de paiement",
+  "booking_payment_cash": "Paiement en espèces à la livraison (Espèces)",
+  "booking_payment_cash_desc": "Payez directement l'intervenante après inspection du travail",
+  "booking_total": "Montant total :",
+  "booking_confirm_cta": "Confirmer la réservation",
+  "booking_change": "Modifier",
+  "booking_success_title": "Réservation confirmée avec succès ! 🎉",
+  "booking_num": "N° de réservation :",
+  "booking_package_label": "Forfait :",
+  "booking_date_label": "Rendez-vous :",
+  "booking_address_label": "Adresse :",
+  "booking_total_label": "Total :",
+  "booking_return_home": "Retour à l'accueil",
   "booking_confirm": "Confirmer la réservation",
   "booking_price": "{price} DT",
   "@booking_price": {
