@@ -30,10 +30,7 @@ User? currentUser(Ref ref) {
 enum AuthStatus { idle, loading, success, error }
 
 class AuthState2 {
-  const AuthState2({
-    this.status = AuthStatus.idle,
-    this.errorMessage,
-  });
+  const AuthState2({this.status = AuthStatus.idle, this.errorMessage});
 
   final AuthStatus status;
   final String? errorMessage;
@@ -76,7 +73,8 @@ class AuthNotifier extends _$AuthNotifier {
           'role': 'customer',
         },
       );
-      if (res.user == null) throw Exception('Sign-up failed — no user returned.');
+      if (res.user == null)
+        throw Exception('Sign-up failed — no user returned.');
       state = state.copyWith(status: AuthStatus.success);
     } on AuthException catch (e) {
       state = state.copyWith(
@@ -92,16 +90,10 @@ class AuthNotifier extends _$AuthNotifier {
   }
 
   // ── Sign In ───────────────────────────────────────────────────────────────
-  Future<void> signIn({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signIn({required String email, required String password}) async {
     state = state.copyWith(status: AuthStatus.loading, errorMessage: null);
     try {
-      await _client.auth.signInWithPassword(
-        email: email,
-        password: password,
-      );
+      await _client.auth.signInWithPassword(email: email, password: password);
       state = state.copyWith(status: AuthStatus.success);
     } on AuthException catch (e) {
       state = state.copyWith(

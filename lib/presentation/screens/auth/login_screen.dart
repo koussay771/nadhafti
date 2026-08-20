@@ -131,6 +131,21 @@ class LoginScreen extends HookConsumerWidget {
                   },
                 ),
 
+                const SizedBox(height: AppSpacing.md),
+
+                // ── Admin / Demo Bypass ─────────────────────────────────────
+                Center(
+                  child: TextButton.icon(
+                    onPressed: () => context.go(AppRoutes.home),
+                    icon: const Icon(Icons.admin_panel_settings_rounded),
+                    label: const Text('دخول سريع / Demo Mode', style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    ),
+                  ),
+                ),
+
                 const SizedBox(height: AppSpacing.xl),
 
                 // ── Divider + Social ────────────────────────────────────────
