@@ -120,19 +120,8 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
       ),
       body: Stack(
         children: [
-          // ── Google Map View ───────────────────────────────────────────────
-          GoogleMap(
-            initialCameraPosition: const CameraPosition(
-              target: _initialPosition,
-              zoom: 13.5,
-            ),
-            onMapCreated: (controller) => _mapController = controller,
-            onCameraMove: _onCameraMove,
-            myLocationButtonEnabled: false,
-            zoomControlsEnabled: false,
-            compassEnabled: false,
-            mapToolbarEnabled: false,
-          ),
+          // ── Google Map View with fallback safety ─────────────────────────
+          _buildMapWidget(),
 
           // ── Center Pin Indicator ─────────────────────────────────────────
           Center(
@@ -343,20 +332,36 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
 
                     const SizedBox(height: AppSpacing.lg),
 
-                    // Confirm CTA Button
-                    NadhaftiButton(
-                      label: _isServiceable
-                          ? 'تأكيد هذا العنوان'
-                          : 'الموقع غير مدعوم حاليًا',
-                      onPressed: _isServiceable ? _confirmLocation : null,
-                    ),
-                  ],
+                      // Confirm CTA Button
+                      NadhaftiButton(
+                        label: _isServiceable
+                            ? 'تأكيد هذا العنوان'
+                            : 'الموقع غير مدعوم حاليًا',
+                        onPressed: _isServiceable ? _confirmLocation : null,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
   }
+
+  Widget _buildMapWidget() {
+    return GoogleMap(
+      initialCameraPosition: const CameraPosition(
+        target: _initialPosition,
+        zoom: 13.5,
+      ),
+      onMapCreated: (controller) => _mapController = controller,
+      onCameraMove: _onCameraMove,
+      myLocationButtonEnabled: false,
+      zoomControlsEnabled: false,
+      compassEnabled: false,
+      mapToolbarEnabled: false,
+    );
+  }
 }
+
