@@ -2,6 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../presentation/screens/auth/login_screen.dart';
+import '../../presentation/screens/auth/signup_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_screen.dart';
 
 part 'app_router.g.dart';
@@ -40,7 +42,14 @@ GoRouter appRouter(Ref ref) {
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingScreen(),
       ),
-      // TODO Phase 2: auth routes
+      GoRoute(
+        path: AppRoutes.login,
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.signup,
+        builder: (context, state) => const SignUpScreen(),
+      ),
       // TODO Phase 3: home route
       // TODO Phase 4–7: remaining routes
     ],
