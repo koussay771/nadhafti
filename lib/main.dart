@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/l10n/generated/app_localizations.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'presentation/providers/locale_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class NadhaftiApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
+    final locale = ref.watch(appLocaleProvider);
 
     return MaterialApp.router(
       // ── Identity ───────────────────────────────────────────────────────────
@@ -44,9 +46,8 @@ class NadhaftiApp extends ConsumerWidget {
       // ── Theme ──────────────────────────────────────────────────────────────
       theme: buildAppTheme(),
 
-      // ── Localization ───────────────────────────────────────────────────────
-      // Default: Arabic (RTL). French is toggled via Settings (Phase 7).
-      locale: const Locale('ar'),
+      // ── Dynamic Localization ──────────────────────────────────────────────
+      locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,
