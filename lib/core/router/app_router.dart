@@ -7,6 +7,8 @@ import '../../presentation/screens/auth/signup_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/location/pick_location_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_screen.dart';
+import '../../presentation/screens/property/add_property_screen.dart';
+import '../../presentation/screens/property/select_property_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -59,6 +61,14 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: AppRoutes.pickLocation,
         builder: (context, state) => const PickLocationScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.selectProperty,
+        builder: (context, state) => const SelectPropertyScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.addProperty,
+        builder: (context, state) => const AddPropertyScreen(),
       ),
       // TODO Phase 3: home route
       // TODO Phase 4–7: remaining routes
