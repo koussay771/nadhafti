@@ -48,7 +48,7 @@ final class CleaningPackagesProvider
   }
 }
 
-String _$cleaningPackagesHash() => r'4f3d4c1696f85f5baaa87f15d0ea0d7c223034d8';
+String _$cleaningPackagesHash() => r'3c2f14613970c0d032a5507e1cc38705fbeb415b';
 
 @ProviderFor(SelectedPackage)
 final selectedPackageProvider = SelectedPackageProvider._();

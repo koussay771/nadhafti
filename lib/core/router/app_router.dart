@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/auth/signup_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
+import '../../presentation/screens/location/pick_location_screen.dart';
 import '../../presentation/screens/onboarding/onboarding_screen.dart';
 
 part 'app_router.g.dart';
@@ -54,6 +55,10 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: AppRoutes.home,
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.pickLocation,
+        builder: (context, state) => const PickLocationScreen(),
       ),
       // TODO Phase 3: home route
       // TODO Phase 4–7: remaining routes
