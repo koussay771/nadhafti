@@ -67,33 +67,50 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   }) async {
     setState(() => _isLoading = true);
 
-    final total = _calculateTotal(package.basePrice);
-    final timeSlot = locale == 'ar'
-        ? _timeSlotOptions[_selectedTimeIndex]['ar']!
-        : _timeSlotOptions[_selectedTimeIndex]['fr']!;
+    try {
+      final total = _calculateTotal(package.basePrice);
+      final timeSlot = locale == 'ar'
+          ? _timeSlotOptions[_selectedTimeIndex]['ar']!
+          : _timeSlotOptions[_selectedTimeIndex]['fr']!;
 
-    final booking = await ref
-        .read(userBookingsProvider.notifier)
-        .createBooking(
-          packageId: package.id,
-          packageName: package.localizedName(locale),
-          propertyId: property.id,
-          propertyName: property.name,
-          addressText: addressText,
-          scheduledDate: _selectedDate,
-          timeSlot: timeSlot,
-          basePrice: package.basePrice,
-          addOns: _selectedAddOnIds.toList(),
-          totalPrice: total,
-          specialNotes: _notesCtrl.text.trim().isNotEmpty
-              ? _notesCtrl.text.trim()
-              : null,
+      final booking = await ref
+          .read(userBookingsProvider.notifier)
+          .createBooking(
+            packageId: package.id,
+            packageName: package.localizedName(locale),
+            propertyId: property.id,
+            propertyName: property.name,
+            addressText: addressText,
+            scheduledDate: _selectedDate,
+            timeSlot: timeSlot,
+            basePrice: package.basePrice,
+            addOns: _selectedAddOnIds.toList(),
+            totalPrice: total,
+            specialNotes: _notesCtrl.text.trim().isNotEmpty
+                ? _notesCtrl.text.trim()
+                : null,
+          );
+
+      if (mounted) {
+        _showSuccessDialog(booking, locale, l10n);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: AppColors.error,
+            content: Text(
+              locale == 'ar'
+                  ? 'حدث خطأ أثناء الحجز: $e'
+                  : 'Une erreur est survenue lors de la réservation : $e',
+            ),
+          ),
         );
-
-    setState(() => _isLoading = false);
-
-    if (mounted) {
-      _showSuccessDialog(booking, locale, l10n);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 

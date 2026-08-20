@@ -144,7 +144,7 @@ class HomeScreen extends HookConsumerWidget {
                             .select(packages.first);
                       }
                     });
-                    context.push(AppRoutes.booking);
+                    context.push(AppRoutes.pickLocation);
                   },
                 ),
 
@@ -187,7 +187,7 @@ class HomeScreen extends HookConsumerWidget {
                     l10n: l10n,
                     onSelect: (pkg) {
                       ref.read(selectedPackageProvider.notifier).select(pkg);
-                      context.push(AppRoutes.booking);
+                      context.push(AppRoutes.pickLocation);
                     },
                   ),
                   data: (packages) => ListView.separated(
@@ -206,7 +206,7 @@ class HomeScreen extends HookConsumerWidget {
                           ref
                               .read(selectedPackageProvider.notifier)
                               .select(package);
-                          context.push(AppRoutes.booking);
+                          context.push(AppRoutes.pickLocation);
                         },
                       );
                     },

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/models/booking.dart';
 import 'auth_provider.dart';
@@ -17,7 +18,8 @@ class UserBookingsNotifier extends _$UserBookingsNotifier {
           .from('bookings')
           .select()
           .eq('user_id', user.id)
-          .order('scheduled_date', ascending: false);
+          .order('scheduled_date', ascending: false)
+          .timeout(const Duration(seconds: 4));
 
       return (response as List<dynamic>)
           .map((e) => Booking.fromJson(e as Map<String, dynamic>))
@@ -63,9 +65,12 @@ class UserBookingsNotifier extends _$UserBookingsNotifier {
 
     if (user != null) {
       try {
-        await client.from('bookings').insert(newBooking.toJson());
+        await client
+            .from('bookings')
+            .insert(newBooking.toJson())
+            .timeout(const Duration(seconds: 3));
       } catch (_) {
-        // Fallback locally
+        // Safe fallback - offline/demo mode instant confirmation
       }
     }
 

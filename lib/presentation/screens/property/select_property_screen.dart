@@ -15,6 +15,7 @@ class SelectPropertyScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).languageCode;
     final propertiesAsync = ref.watch(userPropertiesProvider);
     final selectedProperty = ref.watch(selectedPropertyProvider);
 
@@ -35,10 +36,23 @@ class SelectPropertyScreen extends HookConsumerWidget {
         ),
         child: SafeArea(
           child: NadhaftiButton(
-            label: 'متابعة إلى تفاصيل الحجز',
-            onPressed: selectedProperty != null
-                ? () => context.push(AppRoutes.booking)
-                : null,
+            label: locale == 'ar' ? 'متابعة إلى تفاصيل الحجز' : 'Continuer vers la réservation',
+            onPressed: () {
+              if (selectedProperty == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: AppColors.error,
+                    content: Text(
+                      locale == 'ar'
+                          ? 'يرجى اختيار عقار أو إضافة عقار جديد لمتابعة الحجز ⚠️'
+                          : 'Veuillez sélectionner un bien ou en ajouter un pour continuer ⚠️',
+                    ),
+                  ),
+                );
+                return;
+              }
+              context.push(AppRoutes.booking);
+            },
           ),
         ),
       ),
@@ -53,14 +67,16 @@ class SelectPropertyScreen extends HookConsumerWidget {
             children: [
               // Header title
               Text(
-                'اختر العقار المراد تنظيفه',
+                locale == 'ar' ? 'اختر العقار المراد تنظيفه' : 'Sélectionnez le bien à nettoyer',
                 style: AppTextStyles.headlineSm.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
-                'تساعدنا تفاصيل العقار في تجهيز المعدات المناسبة والوقت اللازم',
+                locale == 'ar'
+                    ? 'تساعدنا تفاصيل العقار في تجهيز المعدات المناسبة والوقت اللازم'
+                    : 'Les détails du bien nous aident à estimer la durée et préparer le matériel',
                 style: AppTextStyles.caption.copyWith(
                   color: AppColors.onSurfaceVariant,
                 ),
@@ -76,10 +92,15 @@ class SelectPropertyScreen extends HookConsumerWidget {
                     child: CircularProgressIndicator(color: AppColors.primary),
                   ),
                 ),
-                error: (_, __) => const Text('حدث خطأ في تحميل العقارات'),
+                error: (_, __) => Text(
+                  locale == 'ar'
+                      ? 'حدث خطأ في تحميل العقارات'
+                      : 'Erreur lors du chargement des biens',
+                ),
                 data: (properties) {
                   if (properties.isEmpty) {
                     return _EmptyPropertyView(
+                      locale: locale,
                       onAdd: () => context.push(AppRoutes.addProperty),
                     );
                   }
@@ -97,6 +118,7 @@ class SelectPropertyScreen extends HookConsumerWidget {
                       return _PropertyCard(
                         property: property,
                         isSelected: isSelected,
+                        locale: locale,
                         onTap: () {
                           ref
                               .read(selectedPropertyProvider.notifier)
@@ -140,11 +162,13 @@ class _PropertyCard extends StatelessWidget {
   const _PropertyCard({
     required this.property,
     required this.isSelected,
+    required this.locale,
     required this.onTap,
   });
 
   final Property property;
   final bool isSelected;
+  final String locale;
   final VoidCallback onTap;
 
   IconData _getTypeIcon(PropertyType type) {
@@ -162,6 +186,11 @@ class _PropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typeLabel = locale == 'ar' ? property.type.labelAr : property.type.name;
+    final bedLabel = locale == 'ar' ? '${property.bedrooms} غرف' : '${property.bedrooms} ch.';
+    final bathLabel = locale == 'ar' ? '${property.bathrooms} حمام' : '${property.bathrooms} sdb';
+    final sqmLabel = '${property.areaSqm.toInt()} m²';
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -210,10 +239,12 @@ class _PropertyCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          property.name,
-                          style: AppTextStyles.labelLg.copyWith(
-                            fontWeight: FontWeight.w700,
+                        Flexible(
+                          child: Text(
+                            property.name,
+                            style: AppTextStyles.labelLg.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -227,7 +258,7 @@ class _PropertyCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(AppRadii.sm),
                           ),
                           child: Text(
-                            property.type.labelAr,
+                            typeLabel,
                             style: const TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,
@@ -242,17 +273,17 @@ class _PropertyCard extends StatelessWidget {
                       children: [
                         _DetailChip(
                           icon: Icons.bed_rounded,
-                          label: '${property.bedrooms} غرف',
+                          label: bedLabel,
                         ),
                         const SizedBox(width: 8),
                         _DetailChip(
                           icon: Icons.bathtub_rounded,
-                          label: '${property.bathrooms} حمام',
+                          label: bathLabel,
                         ),
                         const SizedBox(width: 8),
                         _DetailChip(
                           icon: Icons.square_foot_rounded,
-                          label: '${property.areaSqm.toInt()} م²',
+                          label: sqmLabel,
                         ),
                       ],
                     ),
@@ -313,7 +344,8 @@ class _DetailChip extends StatelessWidget {
 }
 
 class _EmptyPropertyView extends StatelessWidget {
-  const _EmptyPropertyView({required this.onAdd});
+  const _EmptyPropertyView({required this.locale, required this.onAdd});
+  final String locale;
   final VoidCallback onAdd;
 
   @override
@@ -330,19 +362,21 @@ class _EmptyPropertyView extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'لا يوجد عقار محفوظ بعد',
+              locale == 'ar' ? 'لا يوجد عقار محفوظ بعد' : 'Aucun bien enregistré',
               style: AppTextStyles.headlineSm,
             ),
             const SizedBox(height: 4),
             Text(
-              'أضف عقارك الأول لتسهيل الحجز واحتساب الوقت بدقة',
+              locale == 'ar'
+                  ? 'أضف عقارك الأول لتسهيل الحجز واحتساب الوقت بدقة'
+                  : 'Ajoutez votre premier bien pour continuer la réservation',
               style: AppTextStyles.bodyMd,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.lg),
             ElevatedButton(
               onPressed: onAdd,
-              child: const Text('إضافة عقار الآن'),
+              child: Text(locale == 'ar' ? 'إضافة عقار الآن' : 'Ajouter un bien maintenant'),
             ),
           ],
         ),

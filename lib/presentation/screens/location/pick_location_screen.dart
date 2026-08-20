@@ -44,6 +44,9 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
 
   void _onCameraMove(CameraPosition position) {
     _currentPosition = position.target;
+  }
+
+  void _onCameraIdle() {
     final isWithin = UserAddress.isWithinServiceArea(
       _currentPosition.latitude,
       _currentPosition.longitude,
@@ -215,12 +218,7 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
     );
 
     ref.read(selectedAddressProvider.notifier).setAddress(address);
-
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.push(AppRoutes.selectProperty);
-    }
+    context.push(AppRoutes.selectProperty);
   }
 
   @override
@@ -243,6 +241,7 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
             ),
             onMapCreated: (controller) => _mapController = controller,
             onCameraMove: _onCameraMove,
+            onCameraIdle: _onCameraIdle,
             myLocationButtonEnabled: false,
             myLocationEnabled: true,
             zoomControlsEnabled: false,
