@@ -73,8 +73,9 @@ class AuthNotifier extends _$AuthNotifier {
           'role': 'customer',
         },
       );
-      if (res.user == null)
+      if (res.user == null) {
         throw Exception('Sign-up failed — no user returned.');
+      }
       state = state.copyWith(status: AuthStatus.success);
     } on AuthException catch (e) {
       state = state.copyWith(
