@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/l10n/generated/app_localizations.dart';
@@ -20,11 +22,12 @@ class PickLocationScreen extends StatefulHookConsumerWidget {
 class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
   GoogleMapController? _mapController;
 
-  // Default initial position: Monastir, Tunisia
-  static const LatLng _initialPosition = LatLng(35.7643, 10.8113);
+  // Default initial position: Monastir, Tunisia (Lat: 35.7833, Lng: 10.8333)
+  static const LatLng _initialPosition = LatLng(35.7833, 10.8333);
   LatLng _currentPosition = _initialPosition;
   String _selectedHubName = 'المنستير المدينة (Centre-ville)';
   bool _isServiceable = true;
+  bool _isLocating = false;
 
   final TextEditingController _streetCtrl = TextEditingController();
   final TextEditingController _buildingCtrl = TextEditingController();
@@ -71,6 +74,118 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
         ),
       ),
     );
+  }
+
+  /// Request GPS Location Permissions and Fetch Device Current Position ("خريطتي")
+  Future<void> _fetchCurrentLocation() async {
+    setState(() => _isLocating = true);
+
+    try {
+      // 1. Check & Request permission using permission_handler & geolocator
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('تم رفض إذن الوصول إلى الموقع الجغرافي.'),
+                backgroundColor: AppColors.error,
+              ),
+            );
+          }
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'إذن الموقع معطل نهائيًا. يرجى تفعيله من إعدادات الهاتف.',
+              ),
+              action: SnackBarAction(
+                label: 'الإعدادات',
+                textColor: Colors.white,
+                onPressed: () => openAppSettings(),
+              ),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        return;
+      }
+
+      // 2. Ensure location services are enabled
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('خدمة الموقع (GPS) مغلقة على الهاتف. يرجى تشغيلها.'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+        return;
+      }
+
+      // 3. Get Current Position
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+          timeLimit: Duration(seconds: 10),
+        ),
+      );
+
+      final userLatLng = LatLng(position.latitude, position.longitude);
+      final isWithin = UserAddress.isWithinServiceArea(
+        position.latitude,
+        position.longitude,
+      );
+
+      setState(() {
+        _currentPosition = userLatLng;
+        _selectedHubName = isWithin ? 'موقعي الحالي (GPS)' : 'موقعي خارج التغطية';
+        _isServiceable = isWithin;
+      });
+
+      _mapController?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: userLatLng,
+            zoom: 15.5,
+          ),
+        ),
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: isWithin ? AppColors.primary : AppColors.error,
+            content: Text(
+              isWithin
+                  ? 'تم تحديد موقعك بدقة 📍'
+                  : 'موقعك الحالي خارج ولاية المنستير.',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('تعذر تحديد موقعك الحالي: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLocating = false);
+      }
+    }
   }
 
   void _confirmLocation() {
@@ -120,8 +235,20 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
       ),
       body: Stack(
         children: [
-          // ── Google Map View with fallback safety ─────────────────────────
-          _buildMapWidget(),
+          // ── Google Map View ───────────────────────────────────────────────
+          GoogleMap(
+            initialCameraPosition: const CameraPosition(
+              target: _initialPosition,
+              zoom: 13.5,
+            ),
+            onMapCreated: (controller) => _mapController = controller,
+            onCameraMove: _onCameraMove,
+            myLocationButtonEnabled: false,
+            myLocationEnabled: true,
+            zoomControlsEnabled: false,
+            compassEnabled: false,
+            mapToolbarEnabled: false,
+          ),
 
           // ── Center Pin Indicator ─────────────────────────────────────────
           Center(
@@ -132,8 +259,8 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
+                      horizontal: 12,
+                      vertical: 6,
                     ),
                     decoration: BoxDecoration(
                       color: _isServiceable
@@ -142,8 +269,9 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
                       borderRadius: BorderRadius.circular(AppRadii.full),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 6,
+                          color: Colors.black.withValues(alpha: 0.25),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -151,7 +279,7 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
                       _isServiceable ? 'الموقع المحدد 📍' : 'خارج التغطية ⚠️',
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -159,7 +287,7 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
                   const SizedBox(height: 4),
                   Icon(
                     Icons.location_pin,
-                    size: 44,
+                    size: 46,
                     color: _isServiceable
                         ? AppColors.primary
                         : AppColors.error,
@@ -201,6 +329,40 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
                     onSelected: (_) => _moveToHub(hub),
                   );
                 },
+              ),
+            ),
+          ),
+
+          // ── Floating "خريطتي / GPS" Button ───────────────────────────────
+          Positioned(
+            right: AppSpacing.containerMargin,
+            bottom: 250,
+            child: Material(
+              color: Colors.white,
+              elevation: 4,
+              shape: const CircleBorder(),
+              child: InkWell(
+                onTap: _isLocating ? null : _fetchCurrentLocation,
+                customBorder: const CircleBorder(),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: _isLocating
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.primary,
+                            ),
+                          ),
+                        )
+                      : const Icon(
+                          Icons.my_location_rounded,
+                          color: AppColors.primary,
+                          size: 26,
+                        ),
+                ),
               ),
             ),
           ),
@@ -305,7 +467,7 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
 
                     const SizedBox(height: AppSpacing.md),
 
-                    // Additional optional details (Street, Building, Apt)
+                    // Additional optional details (Street, Building)
                     Row(
                       children: [
                         Expanded(
@@ -332,36 +494,20 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
 
                     const SizedBox(height: AppSpacing.lg),
 
-                      // Confirm CTA Button
-                      NadhaftiButton(
-                        label: _isServiceable
-                            ? 'تأكيد هذا العنوان'
-                            : 'الموقع غير مدعوم حاليًا',
-                        onPressed: _isServiceable ? _confirmLocation : null,
-                      ),
-                    ],
-                  ),
+                    // Confirm CTA Button
+                    NadhaftiButton(
+                      label: _isServiceable
+                          ? 'تأكيد هذا العنوان'
+                          : 'الموقع غير مدعوم حاليًا',
+                      onPressed: _isServiceable ? _confirmLocation : null,
+                    ),
+                  ],
                 ),
               ),
             ),
+          ),
         ],
       ),
     );
   }
-
-  Widget _buildMapWidget() {
-    return GoogleMap(
-      initialCameraPosition: const CameraPosition(
-        target: _initialPosition,
-        zoom: 13.5,
-      ),
-      onMapCreated: (controller) => _mapController = controller,
-      onCameraMove: _onCameraMove,
-      myLocationButtonEnabled: false,
-      zoomControlsEnabled: false,
-      compassEnabled: false,
-      mapToolbarEnabled: false,
-    );
-  }
 }
-

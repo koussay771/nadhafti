@@ -10,7 +10,7 @@
         <!-- Google Maps Android API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD-PLACEHOLDER-MAPS-KEY-NADHAFTI" />
+            android:value="AIzaSyDK4lsct3779WIpSqlQ1u9b8OwAJRbnx6o" />
 
         <activity
             android:name=".MainActivity"
